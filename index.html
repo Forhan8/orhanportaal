@@ -1,63 +1,47 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Neco Sarıbıyık - AI ile Konuş</title>
-</head>
-<body style="font-family: sans-serif; text-align: center; padding: 40px;">
-  <h1>Orhanportaal 👨‍👩‍👧‍👦</h1>
-  <p>Ben Neco Sarıbıyık! Ne istersen sor, sana cevap vereyim 🧠</p>
-
-  <img src="neco_saribiyik_cropped.png" alt="Neco Sarıbıyık" width="200" style="margin-bottom: 20px;">
-
-  <br>
-  <input type="text" id="userInput" placeholder="Bana bir şey sor..." style="padding: 10px; width: 300px; font-size: 16px;">
-  <button onclick="askGPT()" style="padding: 10px 20px; font-size: 16px; margin-left: 10px;">🧠 Cevapla</button>
-
-  <p id="response" style="margin-top: 30px; font-size: 18px;"></p>
-
-  <script>
-    async function askGPT() {
-      const input = document.getElementById("userInput").value;
-      const responseBox = document.getElementById("response");
-      responseBox.innerText = "Bekleniyor...";
-
-      const apiKey = "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"; // <-- hier vul je jouw eigen key in
-      const endpoint = "https://api.openai.com/v1/chat/completions";
-
-      try {
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: input }],
-            temperature: 0.7,
-            max_tokens: 100
-          })
-        });
-
-        const data = await res.json();
-        const reply = data.choices[0].message.content;
-        responseBox.innerText = reply;
-
-        // Spreek het antwoord uit
-        const utterance = new SpeechSynthesisUtterance(reply);
-        utterance.lang = 'tr-TR';
-        utterance.pitch = 1.2;
-        utterance.rate = 1;
-        speechSynthesis.speak(utterance);
-      } catch (error) {
-        responseBox.innerText = "Bir hata oluştu. Lütfen tekrar deneyin.";
-        console.error(error);
-      }
+  <title>Orhanportaal 👨‍👩‍👧‍👦</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 60px;
+      background-color: #f0f8ff;
     }
-  </script>
-
-  <p style="margin-top: 40px;">Daha fazla eğlence yakında burada olacak!</p>
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 40px;
+    }
+    .portal-button {
+      padding: 20px 40px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      background-color: #ffd700;
+      cursor: pointer;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+      transition: 0.3s;
+    }
+    .portal-button:hover {
+      background-color: #ffcc00;
+    }
+  </style>
+</head>
+<body>
+  <h1>👨‍👩‍👧‍👦 Orhanportaal</h1>
+  <p>Kies je zone:</p>
+  
+  <div class="button-container">
+    <a href="kinderen.html"><button class="portal-button">🧒 Voor Kinderen</button></a>
+    <a href="volwassenen.html"><button class="portal-button">🧠 Voor Volwassenen</button></a>
+  </div>
 </body>
 </html>
