@@ -2,34 +2,28 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Orhanportaal - Neco Sarıbıyık</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-      background-color: #fff3cd;
+  <title>Neco Sarıbıyık - AI ile Konuş</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/neco.png">
+  <meta name="theme-color" content="#ffffff">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(() => console.log("✅ Service worker geregistreerd"))
+        .catch(err => console.error("❌ Service worker fout:", err));
     }
-    img {
-      width: 200px;
-      margin-bottom: 20px;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin: 10px;
-    }
-  </style>
+  </script>
 </head>
-<body>
-  <h1>👧 Neco Sarıbıyık ile Konuş</h1>
-  <p>Ben Neco! Ne istersen yaz, sana cevap vereyim.</p>
+<body style="font-family: sans-serif; text-align: center; padding: 40px;">
+  <h1>👧 Neco Sarıbıyık</h1>
+  <p>Merhaba! Ben Neco. Bana bir şey yaz, sana cevap vereyim 🧠</p>
 
-  <img src="https://raw.githubusercontent.com/forhan8/orhanportaal/main/neco_saribiyik_cropped.png" alt="Neco Sarıbıyık">
+  <img src="neco.png" alt="Neco Sarıbıyık" width="200" style="margin-bottom: 20px;">
 
   <br>
-  <input type="text" id="userInput" placeholder="Bana bir şey sor...">
-  <button onclick="askGPT()">🧠 Cevapla</button>
+  <input type="text" id="userInput" placeholder="Bana bir şey sor..." style="padding: 10px; width: 300px; font-size: 16px;">
+  <button onclick="askGPT()" style="padding: 10px 20px; font-size: 16px; margin-left: 10px;">🧠 Cevapla</button>
 
   <p id="response" style="margin-top: 30px; font-size: 18px;"></p>
 
@@ -40,24 +34,31 @@
       responseBox.innerText = "Bekleniyor...";
 
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/ask", {
+        const res = await fetch("http://localhost:5000/api/ask", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({ message: input })
         });
+
         const data = await res.json();
         const reply = data.reply;
         responseBox.innerText = reply;
 
+        // Spreek het antwoord uit in het Turks
         const utterance = new SpeechSynthesisUtterance(reply);
         utterance.lang = 'tr-TR';
         utterance.pitch = 1.2;
         utterance.rate = 1;
         speechSynthesis.speak(utterance);
-      } catch (err) {
-        responseBox.innerText = "Bir hata oluştu. 😕";
+      } catch (error) {
+        responseBox.innerText = "Bir hata oluştu. Lütfen tekrar deneyin.";
+        console.error(error);
       }
     }
   </script>
+
+  <p style="margin-top: 40px;">📱 Bu sayfayı uygulama olarak kaydedebilirsin!</p>
 </body>
 </html>
